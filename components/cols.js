@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, StyleSheet } from 'react-native';
-import { Cell } from './cell';
+import React, { Component } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { sum } from '../utils';
+import { Cell } from './cell';
 
 export class Col extends Component {
   static propTypes = {
