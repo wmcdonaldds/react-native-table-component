@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import { Feather } from "@expo/vector-icons";
 import PropTypes from 'prop-types';
-import { View, Text, StyleSheet } from 'react-native';
-import { Cell } from './cell';
+import React, { Component, Fragment } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { sum } from '../utils';
+import { Cell } from './cell';
 
 export class Row extends Component {
   static propTypes = {
@@ -26,7 +27,7 @@ export class Row extends Component {
               width={wth}
               height={height}
               flex={flex}
-              textStyle={[cellTextStyle && cellTextStyle(item), textStyle]}
+              textStyle={{ ...(cellTextStyle && cellTextStyle(item)), ...textStyle }}
               {...props}
             />
           );
@@ -43,7 +44,19 @@ export class Rows extends Component {
   };
 
   render() {
-    const { data, style, widthArr, heightArr, flexArr, textStyle, ...props } = this.props;
+    const {
+      data,
+      style,
+      widthArr,
+      heightArr,
+      flexArr,
+      textStyle,
+      belowText,
+      belowTextStyle,
+      rowStyles,
+      childAbove,
+      ...props
+    } = this.props;
     const flex = flexArr ? sum(flexArr) : 0;
     const width = widthArr ? sum(widthArr) : 0;
 
@@ -52,16 +65,19 @@ export class Rows extends Component {
         {data.map((item, i) => {
           const height = heightArr && heightArr[i];
           return (
-            <Row
-              key={i}
-              data={item}
-              widthArr={widthArr}
-              height={height}
-              flexArr={flexArr}
-              style={style}
-              textStyle={textStyle}
-              {...props}
-            />
+            <View key={i} style={rowStyles?.[i]}>
+              {childAbove?.[i]}
+              <Row
+                data={item}
+                widthArr={widthArr}
+                height={height}
+                flexArr={flexArr}
+                style={style}
+                textStyle={textStyle}
+                {...props}
+              />
+              {belowText?.[i] && <Text style={belowTextStyle}> <Feather name="corner-down-right" />{belowText?.[i].map((x, i) => <Fragment key={i}><Text>{x}</Text> {''}</Fragment>)}</Text>}
+            </View>
           );
         })}
       </View>
